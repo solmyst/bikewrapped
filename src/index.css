@@ -1,0 +1,137 @@
+:root {
+  --bg-color: #050505;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --accent-green: #00ff9d;
+  --accent-orange: #ff9d00;
+  --accent-purple: #bd00ff;
+  --accent-red: #ff3333;
+  --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow: hidden;
+  /* Asphalt Texture Effect */
+  background-image:
+    radial-gradient(transparent 0%, #000 100%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Utilities */
+.text-gradient {
+  background: linear-gradient(135deg, var(--accent-green), var(--accent-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 10px rgba(0, 255, 157, 0.3));
+}
+
+.text-orange-gradient {
+  background: linear-gradient(135deg, var(--accent-orange), #ff4d00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glow-green {
+  text-shadow: 0 0 15px rgba(0, 255, 157, 0.8);
+}
+
+.glow-red {
+  text-shadow: 0 0 15px rgba(255, 51, 51, 0.8);
+}
+
+.button-primary {
+  background: linear-gradient(90deg, var(--accent-green), #00cc7a);
+  color: #000;
+  border: none;
+  padding: 14px 28px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  border-radius: 4px;
+  /* Sharper corners for aggressive look */
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+  /* Futuristic/Cyber cut */
+}
+
+.button-primary:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 0 30px rgba(0, 255, 157, 0.5);
+}
+
+.story-container {
+  width: 100%;
+  max-width: 450px;
+  height: 90vh;
+  max-height: 850px;
+  background: #111;
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+  border: 1px solid #333;
+  /* Add subtle tire track pattern or noise to the container too */
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23222' fill-opacity='0.4' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='1'/%3E%3Ccircle cx='13' cy='13' r='1'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Input Styles */
+.biker-input {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 12px;
+  margin-bottom: 15px;
+  width: 100%;
+  font-family: var(--font-family);
+  font-size: 1rem;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.biker-input:focus {
+  border-color: var(--accent-green);
+  box-shadow: 0 0 10px rgba(0, 255, 157, 0.2);
+}
+
+.biker-label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: left;
+}
+
+@media (max-width: 600px) {
+  .story-container {
+    width: 100%;
+    height: 100vh;
+    border-radius: 0;
+    max-height: none;
+  }
+}
