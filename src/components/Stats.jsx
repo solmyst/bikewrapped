@@ -186,44 +186,134 @@ export const SafetySlide = ({ accidents, safetyScore }) => (
     </SlideContainer>
 );
 
-export const SummarySlide = ({ stats }) => (
-    <SlideContainer bgStyle={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231a1a1a' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        backgroundColor: '#050505'
-    }}>
-        <div style={{ background: 'rgba(0,0,0,0.9)', padding: '30px', borderRadius: '15px', border: '1px solid #333', width: '90%', position: 'relative', overflow: 'hidden' }}>
-            {/* Holographic header effect */}
-            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '5px', background: 'linear-gradient(90deg, #00ff9d, #bd00ff, #ff9d00)' }}></div>
+export const SummarySlide = ({ stats }) => {
+    // Calculate Rank
+    const getRank = () => {
+        const dist = parseInt(stats.totalDistanceKm || 0);
+        const speed = parseInt(stats.topSpeedKh || 0);
 
-            <h2 style={{ fontSize: '2rem', marginBottom: '5px', color: '#fff', textAlign: 'left' }}>WRAPPED 2024</h2>
-            <p style={{ textAlign: 'left', color: '#666', marginBottom: '20px', fontSize: '0.9rem' }}>@{stats.userName}</p>
+        if (dist > 10000 && speed > 150) return { title: "APEX PREDATOR", color: "#bd00ff" };
+        if (dist > 5000) return { title: "TARMAC VETERAN", color: "#00ff9d" };
+        if (dist > 2000) return { title: "WEEKEND WARRIOR", color: "#ff9d00" };
+        return { title: "ROOKIE RIDER", color: "#aaa" };
+    };
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', textAlign: 'left' }}>
-                <div>
-                    <p style={{ color: '#444', fontSize: '0.7rem', textTransform: 'uppercase' }}>Distance</p>
-                    <p style={{ fontSize: '1.4rem', fontWeight: 'bold' }}>{parseInt(stats.totalDistanceKm).toLocaleString()} <span style={{ fontSize: '0.8rem', color: '#00ff9d' }}>KM</span></p>
-                </div>
-                <div>
-                    <p style={{ color: '#444', fontSize: '0.7rem', textTransform: 'uppercase' }}>Trips</p>
-                    <p style={{ fontSize: '1.4rem', fontWeight: 'bold' }}>{stats.totalTrips}</p>
-                </div>
-                <div>
-                    <p style={{ color: '#444', fontSize: '0.7rem', textTransform: 'uppercase' }}>Top Speed</p>
-                    <p style={{ fontSize: '1.4rem', fontWeight: 'bold' }}>{stats.topSpeedKh} <span style={{ fontSize: '0.8rem', color: '#bd00ff' }}>KH</span></p>
-                </div>
-                <div>
-                    <p style={{ color: '#444', fontSize: '0.7rem', textTransform: 'uppercase' }}>Violations</p>
-                    <p style={{ fontSize: '1.4rem', fontWeight: 'bold', color: stats.challans.count > 0 ? '#ff3333' : '#666' }}>{stats.challans.count}</p>
-                </div>
-            </div>
+    const rank = getRank();
+    const date = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
-            <div style={{ marginTop: '30px', borderTop: '1px dashed #333', paddingTop: '15px' }}>
-                <p style={{ color: '#888', fontStyle: 'italic', fontSize: '0.9rem' }}>"Keep the rubber side down."</p>
-            </div>
-        </div>
+    return (
+        <SlideContainer bgStyle={{
+            backgroundImage: `radial-gradient(circle at 50% 10%, #222 0%, #000 90%)`,
+        }}>
+            <motion.div
+                initial={{ scale: 0.9, opacity: 0, rotateX: 20 }}
+                animate={{ scale: 1, opacity: 1, rotateX: 0 }}
+                transition={{ duration: 0.8, type: 'spring' }}
+                style={{
+                    width: '90%',
+                    maxWidth: '380px',
+                    background: 'rgba(25, 25, 25, 0.8)',
+                    backdropFilter: 'blur(10px)',
+                    borderRadius: '20px',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.9)',
+                    overflow: 'hidden',
+                    position: 'relative',
+                    padding: '0',
+                    margin: '0 auto'
+                }}
+            >
+                {/* Decorative Top Bar */}
+                <div style={{ background: '#111', padding: '15px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #333' }}>
+                    <div style={{ fontSize: '0.7rem', color: '#666', letterSpacing: '2px' }}>RIDER IDENTITY // 2024</div>
+                    <div style={{ display: 'flex', gap: '5px' }}>
+                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ff3333' }}></div>
+                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ff9d00' }}></div>
+                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#00ff9d' }}></div>
+                    </div>
+                </div>
 
-        <button className="button-primary" style={{ marginTop: '30px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Share2 size={18} /> SAVE CARD
-        </button>
-    </SlideContainer>
-);
+                <div style={{ padding: '25px', position: 'relative' }}>
+                    {/* Background Graph Lines (Decoration) */}
+                    <svg width="100%" height="100%" style={{ position: 'absolute', top: 0, left: 0, opacity: 0.05, pointerEvents: 'none' }}>
+                        <path d="M0,50 Q150,150 400,50" stroke="#fff" fill="none" strokeWidth="2" />
+                        <path d="M0,100 Q150,200 400,100" stroke="#fff" fill="none" strokeWidth="2" />
+                    </svg>
+
+                    {/* Header: Name & Rank */}
+                    <div style={{ display: 'flex', gap: '20px', alignItems: 'center', marginBottom: '30px' }}>
+                        <div style={{
+                            width: '70px', height: '70px',
+                            borderRadius: '15px',
+                            background: `linear-gradient(135deg, ${rank.color}, #000)`,
+                            display: 'flex', justifyContent: 'center', alignItems: 'center',
+                            boxShadow: `0 0 20px -5px ${rank.color}`
+                        }}>
+                            <Bike size={32} color="#fff" />
+                        </div>
+                        <div style={{ textAlign: 'left' }}>
+                            <h2 style={{ margin: 0, fontSize: '1.8rem', color: '#fff', lineHeight: 1 }}>{stats.userName}</h2>
+                            <div style={{
+                                display: 'inline-block',
+                                marginTop: '5px',
+                                padding: '4px 8px',
+                                background: `${rank.color}22`,
+                                border: `1px solid ${rank.color}`,
+                                borderRadius: '4px',
+                                color: rank.color,
+                                fontSize: '0.7rem',
+                                fontWeight: 'bold',
+                                letterSpacing: '1px'
+                            }}>
+                                {rank.title}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Grid Specs */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                        <div style={{ background: '#111', padding: '12px', borderRadius: '10px', textAlign: 'left' }}>
+                            <p style={{ color: '#666', fontSize: '0.65rem', marginBottom: '4px' }}>DISTANCE COVERED</p>
+                            <p style={{ color: '#fff', fontSize: '1.1rem', fontWeight: 'bold' }}>{parseInt(stats.totalDistanceKm).toLocaleString()}<span style={{ fontSize: '0.7rem', color: '#444' }}>KM</span></p>
+                        </div>
+                        <div style={{ background: '#111', padding: '12px', borderRadius: '10px', textAlign: 'left' }}>
+                            <p style={{ color: '#666', fontSize: '0.65rem', marginBottom: '4px' }}>TOP VELOCITY</p>
+                            <p style={{ color: '#fff', fontSize: '1.1rem', fontWeight: 'bold' }}>{stats.topSpeedKh}<span style={{ fontSize: '0.7rem', color: '#444' }}>KM/H</span></p>
+                        </div>
+                        <div style={{ background: '#111', padding: '12px', borderRadius: '10px', textAlign: 'left' }}>
+                            <p style={{ color: '#666', fontSize: '0.65rem', marginBottom: '4px' }}>TOTAL SORTIES</p>
+                            <p style={{ color: '#fff', fontSize: '1.1rem', fontWeight: 'bold' }}>{stats.totalTrips}</p>
+                        </div>
+                        <div style={{ background: '#111', padding: '12px', borderRadius: '10px', textAlign: 'left' }}>
+                            <p style={{ color: '#666', fontSize: '0.65rem', marginBottom: '4px' }}>SAFETY RATING</p>
+                            <p style={{ color: rank.title === "APEX PREDATOR" ? '#bd00ff' : '#00ff9d', fontSize: '1.1rem', fontWeight: 'bold' }}>{stats.safetyScore}/100</p>
+                        </div>
+                    </div>
+
+                    {/* Footer */}
+                    <div style={{ marginTop: '30px', borderTop: '1px dashed #333', paddingTop: '15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ textAlign: 'left' }}>
+                            <p style={{ color: '#444', fontSize: '0.6rem' }}>GENERATED ON</p>
+                            <p style={{ color: '#888', fontSize: '0.8rem' }}>{date}</p>
+                        </div>
+                        {/* Fake Barcode */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '2px', opacity: 0.5 }}>
+                            {[...Array(10)].map((_, i) => (
+                                <div key={i} style={{ width: Math.random() > 0.5 ? '2px' : '4px', height: '20px', background: '#fff' }}></div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </motion.div>
+
+            <motion.button
+                className="button-primary"
+                style={{ marginTop: '30px', display: 'flex', alignItems: 'center', gap: '10px', width: 'auto', padding: '15px 40px' }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+            >
+                <Share2 size={18} /> SAVE IMAGE
+            </motion.button>
+        </SlideContainer>
+    );
+};
